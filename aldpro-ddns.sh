@@ -8,7 +8,7 @@ ASTRA_EXT="http://10.13.81.193/repos/astra17/frozen-ext"
 ALD_MAIN="http://10.13.81.193/repos/astra17/ald-main"
 ALD_EXT="http://10.13.81.193/repos/astra17/ald-ext"
 
-HOSTNAME_NEW="030922178a.guo.gazprom.ru"
+HOSTNAME_NEW=""
 SEARCH=""
 #IP-адрес DNS серевера для КД на момент установки пакетов из сервера репозитория REP-MAIN, после замениться на 127.0.0.1
 NAMESERVERS=""
