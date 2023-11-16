@@ -78,9 +78,9 @@ nameserver $NAMESERVERS
 EOL
 
 systemctl restart networking
-apt update -y
-apt upgrade -y
-
+#apt update -y
+#apt upgrade -y
+apt update && apt install astra-update -y && astra-update -A -r -T
 
 sleep 10
 LEVEL=`astra-modeswitch get`
