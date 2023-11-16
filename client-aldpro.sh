@@ -78,9 +78,10 @@ nameserver $NAMESERVERS
 EOL
 
 systemctl restart networking
-apt update -y
-apt upgrade -y
+#apt update -y
+#apt upgrade -y
 
+apt update && apt install astra-update -y && astra-update -A -r -T
 
 sleep 10
 
@@ -91,6 +92,8 @@ case $LEVEL in
 2)
 
         astra-modeswitch set 2
+	astra-mic-control enable
+	astra-mac-control enable
         echo "Уровень безопасности: Смоленск"
         ;;
 
