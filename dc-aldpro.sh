@@ -89,6 +89,8 @@ case $LEVEL in
 0|1)
 
         astra-modeswitch set 2
+        astra-mic-control enable
+        astra-mac-control enable
         echo "Уровень безопасности: Смоленск"
         ;;
 
@@ -97,7 +99,7 @@ case $LEVEL in
         ;;
 esac
 
-DEBIAN_FRONTEND=noninteractive apt-get install -q -y aldpro-mp
+DEBIAN_FRONTEND=noninteractive apt-get install -q -y aldpro-mp aldpro-gc aldpro-syncer
 
 cat <<EOL > /etc/network/interfaces
 source /etc/network/interfaces.d/*
@@ -122,7 +124,7 @@ EOL
 
 systemctl restart networking
 
-/opt/rbta/aldpro/mp/bin/aldpro-server-install.sh -d $SEARCH  -p $PASSWORD_ADMIN -n $NAME --ip $IPV4 --no-reboot
+aldpro-server-install -d $SEARCH  -p $PASSWORD_ADMIN -n $NAME --ip $IPV4  --setup_syncer --setup_gc --no-reboot
 
 sleep 10
 reboot
