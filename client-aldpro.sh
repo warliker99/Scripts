@@ -2,11 +2,10 @@
 
 #**************************************************************************************************************************
 
-ALD_VERSION="1.4.0"
-ASTRA_BASE="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.3/repository-base"
-ASTRA_EXT="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.3/repository-extended"
-ALD_MAIN="https://download.astralinux.ru/aldpro/stable/repository-main/"
-ALD_EXT="https://download.astralinux.ru/aldpro/stable/repository-extended/"
+ALD_VERSION="2.2.1"
+ASTRA_BASE="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.4/repository-base"
+ASTRA_EXT="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.4/repository-extended"
+ALD_MAIN="https://dl.astralinux.ru/aldpro/frozen/01/2.2.1"
 
 HOSTNAME_NEW="client01.ussov.locale"
 IPV4="172.26.71.111"
@@ -28,8 +27,7 @@ EOL
 
 #Добавление репозиториев ALD Pro
 cat <<EOL > /etc/apt/sources.list.d/aldpro.list
-deb $ALD_MAIN $ALD_VERSION main
-deb $ALD_EXT generic main
+deb $ALD_MAIN 1.7_x86-64  base  main
 EOL
 
 #Установка приоритетов репозиториев
