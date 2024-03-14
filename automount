@@ -1,0 +1,60 @@
+{% set my_host = salt['grains.get']("nodename") %}
+{% if salt['pillar.get']('aldpro-hosts:'+ my_host) is defined %}
+{% set get_vars = salt['pillar.get']('aldpro-hosts:'+ my_host +':rbta_ldap_custom_gp_host_auto_mount') -%}
+{% set config_f = "/etc/security/pam_mount.conf.xml" %}
+
+{% if get_vars %}
+
+install_pam_mount:
+    pkg.latest:
+      - pkgs:
+          - cifs-utils
+          - libpam-mount
+          - sssd-tools
+
+
+pam_mount_conf_xml_header:
+    file.managed:
+      - create: True
+      - name: {{ config_f }}
+      - mode: 755      
+      - contents: |
+            <?xml version="1.0" encoding="utf-8" ?>
+            <!DOCTYPE pam_mount SYSTEM "pam_mount.conf.xml.dtd">
+            <pam_mount>
+                <debug enable="0" />
+                <cifsmount>mount.cifs //%(SERVER)/%(VOLUME) %(MNTPT) -o %(OPTIONS) </cifsmount>
+
+{% for item in get_vars %}
+{% set server_s = item.get('server') %}
+{% set path_s = item.get('path') %}
+{% set mountpoint_s = item.get('mountpoint') %}
+pam_mount_conf_xml_addvol_{{ mountpoint_s }}:
+    file.append:
+      - name: {{ config_f }}
+      - text: |
+            <!-- cifs share smb://{{mountpoint_s}}  -->
+                <volume
+                    fstype="cifs"
+                    server="{{ server_s }}"
+                    path="{{ path_s }}"
+                    mountpoint="{{ mountpoint_s }}"
+                    options="user=%(USER),cruid=%(USER),sec=krb5i,file_mode=0775,dir_mode=0775"
+                />
+{% endfor %}
+
+pam_mount_conf_xml_footer:
+    file.append:
+      - name: {{ config_f }}
+      - text: |
+            <!-- mntoptions -->
+                <luserconf name=".pam_mount.conf.xml" />
+                <mntoptions allow="nosuid,nodev,loop,encryption,fsck,nonempty,allow_root,allow_other" />
+                <mntoptions require="" />
+                <logout wait="50000" hup="1" term="1" kill="1" />
+                <mkmountpoint enable="1" remove="true" />
+            </pam_mount>
+
+
+{% endif %}
+{% endif %}
