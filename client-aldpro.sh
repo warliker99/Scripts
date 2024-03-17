@@ -31,11 +31,11 @@ deb $ALD_MAIN 1.7_x86-64  base  main
 EOL
 
 #Установка приоритетов репозиториев
-cat <<EOL > /etc/apt/preferences.d/aldpro
-Package: *
-Pin: release n=generic
-Pin-Priority: 900
-EOL
+#cat <<EOL > /etc/apt/preferences.d/aldpro
+#Package: *
+#Pin: release n=generic
+#Pin-Priority: 900
+#EOL
 
 #Настройка hostname
 hostnamectl set-hostname $HOSTNAME_NEW 
@@ -66,7 +66,6 @@ EOL
 cat <<EOL > /etc/hosts
 127.0.0.1 localhost.localdomain localhost
 $IPV4 $HOSTNAME_NEW $NAME
-127.0.1.1 $NAME
 EOL
 
 #Настройка /etc/resolv.conf
@@ -79,7 +78,7 @@ systemctl restart networking
 #apt update -y
 #apt upgrade -y
 
-apt update && apt install astra-update -y && astra-update -A -r -T
+apt update && apt dist-upgrade -y -o Dpkg::Options::=--force-confnew
 
 sleep 10
 
