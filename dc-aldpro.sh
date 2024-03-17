@@ -2,11 +2,11 @@
 
 #**************************************************************************************************************************
 
-ALD_VERSION="1.4.0"
-ASTRA_BASE="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.3/repository-base"
-ASTRA_EXT="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.3/repository-extended"
-ALD_MAIN="https://download.astralinux.ru/aldpro/stable/repository-main/"
-ALD_EXT="https://download.astralinux.ru/aldpro/stable/repository-extended/"
+ALD_VERSION="2.2.1"
+ASTRA_BASE="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.4/repository-base"
+ASTRA_EXT="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.4/repository-extended"
+ALD_MAIN="https://dl.astralinux.ru/aldpro/frozen/01/2.2.1"
+
 
 HOSTNAME_NEW="dc01.ussov.locale"
 IPV4="172.26.71.111"
@@ -28,16 +28,15 @@ EOL
 
 #Добавление репозиториев ALD Pro
 cat <<EOL > /etc/apt/sources.list.d/aldpro.list
-deb $ALD_MAIN $ALD_VERSION main
-deb $ALD_EXT generic main
+deb $ALD_MAIN  1.7_x86-64  base  main
 EOL
 
 #Установка приоритетов репозиториев
-cat <<EOL > /etc/apt/preferences.d/aldpro
-Package: *
-Pin: release n=generic
-Pin-Priority: 900
-EOL
+#cat <<EOL > /etc/apt/preferences.d/aldpro
+#Package: *
+#Pin: release n=generic
+#Pin-Priority: 900
+#EOL
 
 #Настройка hostname
 hostnamectl set-hostname $HOSTNAME_NEW 
@@ -68,7 +67,6 @@ EOL
 cat <<EOL > /etc/hosts
 127.0.0.1 localhost.localdomain localhost
 $IPV4 $HOSTNAME_NEW $NAME
-127.0.1.1 $NAME
 EOL
 
 #Настройка /etc/resolv.conf
@@ -80,7 +78,7 @@ EOL
 systemctl restart networking
 #apt update -y
 #apt upgrade -y
-apt update && apt install astra-update -y && astra-update -A -r -T
+apt update &&  apt dist-upgrade -y -o Dpkg::Options::=--force-confnew
 
 sleep 10
 LEVEL=`astra-modeswitch get`
