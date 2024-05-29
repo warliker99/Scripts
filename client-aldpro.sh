@@ -2,10 +2,10 @@
 
 #**************************************************************************************************************************
 
-ALD_VERSION="2.2.1"
-ASTRA_BASE="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.4/repository-base"
-ASTRA_EXT="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.4/repository-extended"
-ALD_MAIN="https://dl.astralinux.ru/aldpro/frozen/01/2.2.1"
+ALD_VERSION="2.3.0"
+ASTRA_BASE="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.5/repository-base"
+ASTRA_EXT="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.5/repository-extended"
+ALD_MAIN="https://dl.astralinux.ru/aldpro/frozen/01/2.3.0"
 
 HOSTNAME_NEW="client01.ussov.locale"
 IPV4="172.26.71.111"
@@ -24,6 +24,10 @@ cat <<EOL > /etc/apt/sources.list
 deb $ASTRA_BASE 1.7_x86-64 main non-free contrib
 deb $ASTRA_EXT 1.7_x86-64 main contrib non-free
 EOL
+
+#Обновление ОС
+apt update -y
+apt install astra-update -y && sudo astra-update -A -r -T
 
 #Добавление репозиториев ALD Pro
 cat <<EOL > /etc/apt/sources.list.d/aldpro.list
