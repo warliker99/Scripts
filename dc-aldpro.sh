@@ -2,10 +2,10 @@
 
 #**************************************************************************************************************************
 
-ALD_VERSION="2.2.1"
-ASTRA_BASE="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.4/repository-base"
-ASTRA_EXT="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.4/repository-extended"
-ALD_MAIN="https://dl.astralinux.ru/aldpro/frozen/01/2.2.1"
+ALD_VERSION="2.3.0"
+ASTRA_BASE="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.5/repository-base"
+ASTRA_EXT="http://download.astralinux.ru/astra/frozen/1.7_x86-64/1.7.5/repository-extended"
+ALD_MAIN="https://dl.astralinux.ru/aldpro/frozen/01/2.3.0"
 
 
 HOSTNAME_NEW="dc01.ussov.locale"
@@ -26,6 +26,10 @@ deb $ASTRA_BASE 1.7_x86-64 main non-free contrib
 deb $ASTRA_EXT 1.7_x86-64 main contrib non-free
 EOL
 
+#Обновление ОС
+apt update -y
+apt install astra-update -y && sudo astra-update -A -r -T
+
 #Добавление репозиториев ALD Pro
 cat <<EOL > /etc/apt/sources.list.d/aldpro.list
 deb $ALD_MAIN  1.7_x86-64  base  main
@@ -38,7 +42,7 @@ EOL
 #Pin-Priority: 900
 #EOL
 
-#Настройка hostname
+#Получение короткого имени hostname
 hostnamectl set-hostname $HOSTNAME_NEW 
 NAME=`awk -F"." '{print $1}' /etc/hostname`
 
@@ -80,6 +84,8 @@ systemctl restart networking
 #apt upgrade -y
 apt update &&  apt dist-upgrade -y -o Dpkg::Options::=--force-confnew
 
+
+#Настройка уровня безопасности
 sleep 10
 LEVEL=`astra-modeswitch get`
 
@@ -97,8 +103,11 @@ case $LEVEL in
         ;;
 esac
 
+#Установка пакетов
 DEBIAN_FRONTEND=noninteractive apt-get install -q -y aldpro-mp aldpro-gc aldpro-syncer
 
+
+#Настройка сети
 cat <<EOL > /etc/network/interfaces
 source /etc/network/interfaces.d/*
 
