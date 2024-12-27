@@ -7,10 +7,7 @@ read  LOGIN
 echo "Пароль учетной записи пользователя для подключения по SSH:"
 read -sr PASSWORD
 
-LIST_HOSTS="sagirova-kg.rec.loc
-abramov-ev.rec.loc
-aldpro-test-e14.rec.loc
-"
+LIST_HOSTS=""
 
 
 for host in $LIST_HOSTS
