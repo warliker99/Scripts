@@ -47,10 +47,7 @@ hostnamectl set-hostname $HOSTNAME_NEW
 NAME=`awk -F"." '{print $1}' /etc/hostname`
 
 
-#Настройка сети
-systemctl stop NetworkManager
-systemctl disable NetworkManager
-systemctl enable networking
+
 
 cat <<EOL > /etc/network/interfaces
 source /etc/network/interfaces.d/*
@@ -79,7 +76,12 @@ search $SEARCH
 nameserver $NAMESERVERS
 EOL
 
+#Настройка сети
+systemctl stop NetworkManager
+systemctl disable NetworkManager
+systemctl enable networking
 systemctl restart networking
+
 #apt update -y
 #apt upgrade -y
 apt update &&  apt dist-upgrade -y -o Dpkg::Options::=--force-confnew
