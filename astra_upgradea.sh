@@ -6,6 +6,7 @@ ASTRA_VERSION_DST="1.8.1"
 ASTRA_BUILD_VERSION_DST="1.8.1.16"
 ASTRA_VERSION_SRC=`cat /etc/astra_version | head -n 1| awk -F"." '{print $1}`
 ASTRA_BUILD_VERSION_SRC=`cat /etc/astra/build_version | head -n 1 | awk -F"." '{print $1}`
+NOTIFICATION_USER="Добрый день! Ваш компьютер будет обновлен до новой версии ОС Astra Linux через 10 минут.\nПросим вас пожалуйста закрыть критическое ПО для предотвращения проблем с его данными."
 #**************************************************************************************************************************
 
 if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC]; then
@@ -14,9 +15,15 @@ if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_B
   deb $ASTRA_BASE 1.8_x86-64 contrib main non-free non-free-firmware
   EOL
   
-  #Обновление ОС
+  #Обновление репозиториев ОС
   apt update -y
   apt install astra-update -y
+
+  #Оповещение пользователей об обновлении ОС.
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <'Тестовое уведомление.'>, 'summary': <'Тестовый заголовок.'>, 'timeout': <'$NOTIFICATION_USER'>}
+  sleep 600
+  
+  #Обновление ОС
   astra-update -A -r -T
   
   ASTRA_BUILD_VERSION_SRC_POST=`cat /etc/astra/build_version | head -n 1 | awk -F"." '{print $1}`
