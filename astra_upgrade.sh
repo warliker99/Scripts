@@ -10,6 +10,12 @@ NOTIFICATION_USER="Добрый день! Ваш компьютер будет �
 NOTIFICATION_USER_POST="Добрый день! На вашем компьютере обновляется операционная система! Просьба не выключать ваш компьютер и не редактировать критические файлы!"
 NOTIFICATION_USER_POST_UPGRADE="Добрый день! Ваша ОС успешно обновлена, вы можете продолжить работу. Хорошего вам дня!"
 #**************************************************************************************************************************
+sudo apt install libdbus-glib-1* -y
+
+cat <<EOL > /etc/xdg/fly-notificationsrc
+[Notifications]
+ListenForBroadcasts=true
+EOL
 
 if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC]; then
   #Добавление репозиториев Astra Linux
@@ -22,10 +28,10 @@ if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_B
   apt install astra-update -y
 
   #Оповещение пользователей об обновлении ОС.
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER>, 'summary': <'Обновление ОС.'>, 'timeout': <'600'>"}
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER>, 'summary': <'Обновление ОС.'>, 'timeout': <'600000'>"}
   sleep 600
 
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER_POST>, 'summary': <'Обновление ОС.'>, 'timeout': <'60'>"}
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER_POST>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>"}
   #Обновление ОС
   astra-update -A -r -T
   
@@ -48,7 +54,7 @@ else
   
   #Обновление репозиториев ПО
   apt update -y
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER_POST_UPGRADE>, 'summary': <'Обновление ОС.'>, 'timeout': <'60'>"}
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER_POST_UPGRADE>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>"}
   exit 0
   
 fi
