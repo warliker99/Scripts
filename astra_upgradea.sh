@@ -28,11 +28,18 @@ if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_B
 
 
 else
+
   echo "ОС уже была обновлена.\nАктуальная версия: $ASTRA_VERSION_SRC\nАктуальный build: $ASTRA_BUILD_VERSION_SRC"
+  
+  #Добавление репозиториев Astra Linux, включая расширенный
   cat <<EOL > /etc/apt/sources.list
   deb $ASTRA_BASE 1.8_x86-64 contrib main non-free non-free-firmware
   deb $ASTRA_EXT 1.8_x86-64 contrib main non-free non-free-firmware
   EOL
+  
+  #Обновление репозиториев ПО
   apt update -y
+  
   exit 0
+  
 fi
