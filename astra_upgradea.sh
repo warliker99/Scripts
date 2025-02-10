@@ -21,15 +21,13 @@ if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_B
   
   ASTRA_BUILD_VERSION_SRC_POST=`cat /etc/astra/build_version | awk -F"." '{print $1}`
   
-  if [ ASTRA_BUILD_VERSION_DST == ASTRA_BUILD_VERSION_SRC]; then
-    echo "ОС успешно обновлена."
-  else
-    echo "Ошибка обновления!\nПроверьте логи обновления на наличие ошибок: /var/log/astra_update*.log"
-    exit 1
-  
+  if [ ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC]; then
+  echo "Ошибка обновления!\nПроверьте логи обновления на наличие ошибок: /var/log/astra_update*.log"
+  exit 1
+  fi
 
 
 else
   echo "ОС уже была обновлена.\nАктуальная версия: $ASTRA_VERSION_SRC\nАктуальный build: $ASTRA_BUILD_VERSION_SRC"
-  exit0
+  exit 0
 fi
