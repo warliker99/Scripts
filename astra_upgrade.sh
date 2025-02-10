@@ -22,10 +22,10 @@ if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_B
   apt install astra-update -y
 
   #Оповещение пользователей об обновлении ОС.
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER>, 'summary': <'Обновление ОС.'>, 'timeout': <'600'>}
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER>, 'summary': <'Обновление ОС.'>, 'timeout': <'600'>"}
   sleep 600
 
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER_POST>, 'summary': <'Обновление ОС.'>, 'timeout': <'60'>}
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER_POST>, 'summary': <'Обновление ОС.'>, 'timeout': <'60'>"}
   #Обновление ОС
   astra-update -A -r -T
   
@@ -48,7 +48,7 @@ else
   
   #Обновление репозиториев ПО
   apt update -y
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER_POST_UPGRADE>, 'summary': <'Обновление ОС.'>, 'timeout': <'60'>}
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER_POST_UPGRADE>, 'summary': <'Обновление ОС.'>, 'timeout': <'60'>"}
   exit 0
   
 fi
