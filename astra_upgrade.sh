@@ -7,6 +7,7 @@ ASTRA_BUILD_VERSION_DST="1.8.1.16"
 ASTRA_VERSION_SRC=`cat /etc/astra_version | head -n 1| awk -F"." '{print $1}`
 ASTRA_BUILD_VERSION_SRC=`cat /etc/astra/build_version | head -n 1 | awk -F"." '{print $1}`
 NOTIFICATION_USER="Добрый день! Ваш компьютер будет обновлен до новой версии ОС Astra Linux через 10 минут.\nПросим вас пожалуйста закрыть критическое ПО для предотвращения проблем с его данными."
+NOTIFICATION_USER_POST="Добрый день! На вашем компьютере обновляется операционная система! Просьба не выключать ваш компьютер и не редактировать критические файлы!"
 #**************************************************************************************************************************
 
 if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC]; then
@@ -20,9 +21,10 @@ if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_B
   apt install astra-update -y
 
   #Оповещение пользователей об обновлении ОС.
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <'Тестовое уведомление.'>, 'summary': <'Тестовый заголовок.'>, 'timeout': <'$NOTIFICATION_USER'>}
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER>, 'summary': <'Обновление ОС.'>, 'timeout': <'600'>}
   sleep 600
-  
+
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER_POST>, 'summary': <'Обновление ОС.'>, 'timeout': <'60'>}
   #Обновление ОС
   astra-update -A -r -T
   
