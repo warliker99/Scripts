@@ -8,6 +8,9 @@ ASTRA_VERSION_SRC=`cat /etc/astra_version |head -n| awk -F"." '{print $1}`
 ASTRA_BUILD_VERSION_SRC=`cat /etc/astra/build_version | awk -F"." '{print $1}`
 #**************************************************************************************************************************
 
+if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC]; then
+
+
 
 #Добавление репозиториев Astra Linux
 cat <<EOL > /etc/apt/sources.list
@@ -18,4 +21,4 @@ EOL
 apt update -y
 apt install astra-update -y
 astra-update -A -r -T
-
+fi
