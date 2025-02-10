@@ -4,8 +4,8 @@ ASTRA_BASE="https://dl.astralinux.ru/astra/frozen/1.8_x86-64/1.8.1/uu/2/main-rep
 ASTRA_EXT="https://dl.astralinux.ru/astra/frozen/1.8_x86-64/1.8.1/uu/2/extended-repository/"
 ASTRA_VERSION_DST="1.8.1"
 ASTRA_BUILD_VERSION_DST="1.8.1.16"
-ASTRA_VERSION_SRC=`cat /etc/astra_version |head -n| awk -F"." '{print $1}`
-ASTRA_BUILD_VERSION_SRC=`cat /etc/astra/build_version | awk -F"." '{print $1}`
+ASTRA_VERSION_SRC=`cat /etc/astra_version | head -n 1| awk -F"." '{print $1}`
+ASTRA_BUILD_VERSION_SRC=`cat /etc/astra/build_version | head -n 1 | awk -F"." '{print $1}`
 #**************************************************************************************************************************
 
 if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC]; then
@@ -19,7 +19,7 @@ if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_B
   apt install astra-update -y
   astra-update -A -r -T
   
-  ASTRA_BUILD_VERSION_SRC_POST=`cat /etc/astra/build_version | awk -F"." '{print $1}`
+  ASTRA_BUILD_VERSION_SRC_POST=`cat /etc/astra/build_version | head -n 1 | awk -F"." '{print $1}`
   
   if [ ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC]; then
   echo "Ошибка обновления!\nПроверьте логи обновления на наличие ошибок: /var/log/astra_update*.log"
