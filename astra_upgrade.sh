@@ -8,6 +8,7 @@ ASTRA_VERSION_SRC=`cat /etc/astra_version | head -n 1| awk -F"." '{print $1}`
 ASTRA_BUILD_VERSION_SRC=`cat /etc/astra/build_version | head -n 1 | awk -F"." '{print $1}`
 NOTIFICATION_USER="Добрый день! Ваш компьютер будет обновлен до новой версии ОС Astra Linux через 10 минут.\nПросим вас пожалуйста закрыть критическое ПО для предотвращения проблем с его данными."
 NOTIFICATION_USER_POST="Добрый день! На вашем компьютере обновляется операционная система! Просьба не выключать ваш компьютер и не редактировать критические файлы!"
+NOTIFICATION_USER_POST_UPGRADE="Добрый день! Ваша ОС успешно обновлена, вы можете продолжить работу. Хорошего вам дня!"
 #**************************************************************************************************************************
 
 if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC]; then
@@ -47,7 +48,7 @@ else
   
   #Обновление репозиториев ПО
   apt update -y
-  
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "\{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER_POST_UPGRADE>, 'summary': <'Обновление ОС.'>, 'timeout': <'60'>}
   exit 0
   
 fi
