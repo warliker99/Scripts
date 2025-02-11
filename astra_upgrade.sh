@@ -39,6 +39,7 @@ if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_B
   
   if [ ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC]; then
   echo "Ошибка обновления!\nПроверьте логи обновления на наличие ошибок: /var/log/astra_update*.log"
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'Ошибка обновления ОС - обратитесь к администратору!'>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>"}
   exit 1
   fi
   
