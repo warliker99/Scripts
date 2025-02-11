@@ -17,11 +17,11 @@ cat <<EOL > /etc/xdg/fly-notificationsrc
 ListenForBroadcasts=true
 EOL
 
-if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC]; then
-  #Добавление репозиториев Astra Linux
-  cat <<EOL > /etc/apt/sources.list
-  deb $ASTRA_BASE 1.8_x86-64 contrib main non-free non-free-firmware
-  EOL
+if [[ (ASTRA_VERSION_DST != ASTRA_VERSION_SRC) || (ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC) ]]; then
+#Добавление репозиториев Astra Linux
+cat <<EOL > /etc/apt/sources.list
+deb $ASTRA_BASE 1.8_x86-64 contrib main non-free non-free-firmware
+EOL
   
   #Обновление репозиториев ОС
   apt update -y
@@ -37,7 +37,7 @@ if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_B
   
   ASTRA_BUILD_VERSION_SRC_POST=`cat /etc/astra/build_version | head -n 1 | awk -F"." '{print $1}`
   
-  if [ ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC]; then
+  if [[ (ASTRA_BUILD_VERSION_DST) != (ASTRA_BUILD_VERSION_SRC) ]]; then
   echo "Ошибка обновления!\nПроверьте логи обновления на наличие ошибок: /var/log/astra_update*.log"
   gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'Ошибка обновления ОС - обратитесь к администратору!'>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>"}
   exit 1
@@ -48,10 +48,10 @@ else
   echo "ОС уже была обновлена.\nАктуальная версия: $ASTRA_VERSION_SRC\nАктуальный build: $ASTRA_BUILD_VERSION_SRC"
   
   #Добавление репозиториев Astra Linux, включая расширенный
-  cat <<EOL > /etc/apt/sources.list
-  deb $ASTRA_BASE 1.8_x86-64 contrib main non-free non-free-firmware
-  deb $ASTRA_EXT 1.8_x86-64 contrib main non-free non-free-firmware
-  EOL
+cat <<EOL > /etc/apt/sources.list
+deb $ASTRA_BASE 1.8_x86-64 contrib main non-free non-free-firmware
+deb $ASTRA_EXT 1.8_x86-64 contrib main non-free non-free-firmware
+EOL
   
   #Обновление репозиториев ПО
   apt update -y
