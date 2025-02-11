@@ -39,6 +39,18 @@ EOL
   ASTRA_BUILD_VERSION_SRC_POST=`cat /etc/astra/build_version | head -n 1 | awk -F" " '{print $1}'`
   echo $ASTRA_BUILD_VERSION_SRC_POST
 
+#Добавление репозиториев Astra Linux, включая расширенный
+cat << EOL > /etc/apt/sources.list
+deb $ASTRA_BASE 1.8_x86-64 contrib main non-free non-free-firmware
+deb $ASTRA_EXT 1.8_x86-64 contrib main non-free non-free-firmware
+EOL
+
+
+  #Обновление репозиториев ПО
+  apt update -y
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'$NOTIFICATION_USER_POST_UPGRADE'>, 'summary': <'Обновление ОС.'>, 'timeou>
+
+
   if [[ ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC_POST ]]; then
   echo "Ошибка обновления! Проверьте логи обновления на наличие ошибок: /var/log/astra_update*.log"
   gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'Ошибка обновления ОС - обратитесь к администратору!'>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>}"
@@ -48,25 +60,8 @@ EOL
 else
 
   echo -e "ОС уже была обновлена.\nАктуальная версия: $ASTRA_VERSION_SRC\nАктуальный build: $ASTRA_BUILD_VERSION_SRC"
-
-#Добавление репозиториев Astra Linux, включая расширенный
-cat << EOL > /etc/apt/sources.list
-deb $ASTRA_BASE 1.8_x86-64 contrib main non-free non-free-firmware
-deb $ASTRA_EXT 1.8_x86-64 contrib main non-free non-free-firmware
-EOL
-exit 0
+  exit 0
 
 fi
 
 
-#Добавление репозиториев Astra Linux, включая расширенный
-cat << EOL > /etc/apt/sources.list
-deb $ASTRA_BASE 1.8_x86-64 contrib main non-free non-free-firmware
-deb $ASTRA_EXT 1.8_x86-64 contrib main non-free non-free-firmware
-EOL
-
-
-#Обновление репозиториев ПО
-apt update -y
-gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'$NOTIFICATION_USER_POST_UPGRADE'>, 'summary': <'Обновление ОС.'>, 'timeou>
-exit 0
