@@ -17,45 +17,56 @@ cat <<EOL > /etc/xdg/fly-notificationsrc
 ListenForBroadcasts=true
 EOL
 
-if [[ (ASTRA_VERSION_DST != ASTRA_VERSION_SRC) || (ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC) ]]; then
+if [[ ("$ASTRA_VERSION_DST" != "$ASTRA_VERSION_SRC") || ("$ASTRA_BUILD_VERSION_DST" != "$ASTRA_BUILD_VERSION_SRC") ]]; then
+
 #Добавление репозиториев Astra Linux
-cat <<EOL > /etc/apt/sources.list
+cat << EOL > /etc/apt/sources.list
 deb $ASTRA_BASE 1.8_x86-64 contrib main non-free non-free-firmware
 EOL
-  
+
   #Обновление репозиториев ОС
   apt update -y
   apt install astra-update -y
 
   #Оповещение пользователей об обновлении ОС.
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'$NOTIFICATION_USER'>, 'summary': <'Обновление ОС.'>, 'timeout': <'600000'>"}
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'$NOTIFICATION_USER'>, 'summary': <'Обновление ОС.'>, 'timeout': <'600000'>}"
   sleep 600
 
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'$NOTIFICATION_USER_POST'>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>"}
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'$NOTIFICATION_USER_POST'>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>}"
   #Обновление ОС
   astra-update -A -r -T
-  
-  ASTRA_BUILD_VERSION_SRC_POST=`cat /etc/astra/build_version | head -n 1 | awk -F"." '{print $1}'`
-  
-  if [[ ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC ]]; then
+
+  ASTRA_BUILD_VERSION_SRC_POST=`cat /etc/astra/build_version | head -n 1 | awk -F" " '{print $1}'`
+  echo $ASTRA_BUILD_VERSION_SRC_POST
+
+  if [[ ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC_POST ]]; then
   echo "Ошибка обновления! Проверьте логи обновления на наличие ошибок: /var/log/astra_update*.log"
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'Ошибка обновления ОС - обратитесь к администратору!'>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>"}
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'Ошибка обновления ОС - обратитесь к администратору!'>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>}"
   exit 1
   fi
-  
+
 else
 
-  echo "ОС уже была обновлена.\nАктуальная версия: $ASTRA_VERSION_SRC\nАктуальный build: $ASTRA_BUILD_VERSION_SRC"
-  
-  #Добавление репозиториев Astra Linux, включая расширенный
-cat <<EOL > /etc/apt/sources.list
+  echo -e "ОС уже была обновлена.\nАктуальная версия: $ASTRA_VERSION_SRC\nАктуальный build: $ASTRA_BUILD_VERSION_SRC"
+
+#Добавление репозиториев Astra Linux, включая расширенный
+cat << EOL > /etc/apt/sources.list
 deb $ASTRA_BASE 1.8_x86-64 contrib main non-free non-free-firmware
 deb $ASTRA_EXT 1.8_x86-64 contrib main non-free non-free-firmware
 EOL
-  
-  #Обновление репозиториев ПО
-  apt update -y
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'$NOTIFICATION_USER_POST_UPGRADE'>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>"}
-  exit 0
-  
+exit 0
+
 fi
+
+
+#Добавление репозиториев Astra Linux, включая расширенный
+cat << EOL > /etc/apt/sources.list
+deb $ASTRA_BASE 1.8_x86-64 contrib main non-free non-free-firmware
+deb $ASTRA_EXT 1.8_x86-64 contrib main non-free non-free-firmware
+EOL
+
+
+#Обновление репозиториев ПО
+apt update -y
+gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'$NOTIFICATION_USER_POST_UPGRADE'>, 'summary': <'Обновление ОС.'>, 'timeou>
+exit 0
