@@ -4,8 +4,8 @@ ASTRA_BASE="https://dl.astralinux.ru/astra/frozen/1.8_x86-64/1.8.1/uu/2/main-rep
 ASTRA_EXT="https://dl.astralinux.ru/astra/frozen/1.8_x86-64/1.8.1/uu/2/extended-repository/"
 ASTRA_VERSION_DST="1.8.1"
 ASTRA_BUILD_VERSION_DST="1.8.1.16"
-ASTRA_VERSION_SRC=`cat /etc/astra_version | head -n 1| awk -F"." '{print $1}`
-ASTRA_BUILD_VERSION_SRC=`cat /etc/astra/build_version | head -n 1 | awk -F"." '{print $1}`
+ASTRA_VERSION_SRC=`cat /etc/astra_version | head -n 1| awk -F"." '{print $1}'`
+ASTRA_BUILD_VERSION_SRC=`cat /etc/astra/build_version | head -n 1 | awk -F"." '{print $1}'`
 NOTIFICATION_USER="Добрый день! Ваш компьютер будет обновлен до новой версии ОС Astra Linux через 10 минут.\nПросим вас пожалуйста закрыть критическое ПО для предотвращения проблем с его данными."
 NOTIFICATION_USER_POST="Добрый день! На вашем компьютере обновляется операционная система! Просьба не выключать ваш компьютер и не редактировать критические файлы!"
 NOTIFICATION_USER_POST_UPGRADE="Добрый день! Ваша ОС успешно обновлена, вы можете продолжить работу. Хорошего вам дня!"
@@ -28,10 +28,10 @@ if [ASTRA_VERSION_DST != ASTRA_VERSION_SRC || ASTRA_BUILD_VERSION_DST != ASTRA_B
   apt install astra-update -y
 
   #Оповещение пользователей об обновлении ОС.
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER>, 'summary': <'Обновление ОС.'>, 'timeout': <'600000'>"}
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'$NOTIFICATION_USER'>, 'summary': <'Обновление ОС.'>, 'timeout': <'600000'>"}
   sleep 600
 
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER_POST>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>"}
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'$NOTIFICATION_USER_POST'>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>"}
   #Обновление ОС
   astra-update -A -r -T
   
@@ -55,7 +55,7 @@ else
   
   #Обновление репозиториев ПО
   apt update -y
-  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <$NOTIFICATION_USER_POST_UPGRADE>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>"}
+  gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'$NOTIFICATION_USER_POST_UPGRADE'>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>"}
   exit 0
   
 fi
