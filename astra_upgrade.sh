@@ -35,10 +35,10 @@ EOL
   #Обновление ОС
   astra-update -A -r -T
   
-  ASTRA_BUILD_VERSION_SRC_POST=`cat /etc/astra/build_version | head -n 1 | awk -F"." '{print $1}`
+  ASTRA_BUILD_VERSION_SRC_POST=`cat /etc/astra/build_version | head -n 1 | awk -F"." '{print $1}'`
   
-  if [[ (ASTRA_BUILD_VERSION_DST) != (ASTRA_BUILD_VERSION_SRC) ]]; then
-  echo "Ошибка обновления!\nПроверьте логи обновления на наличие ошибок: /var/log/astra_update*.log"
+  if [[ ASTRA_BUILD_VERSION_DST != ASTRA_BUILD_VERSION_SRC ]]; then
+  echo "Ошибка обновления! Проверьте логи обновления на наличие ошибок: /var/log/astra_update*.log"
   gdbus emit --system --object-path / --signal org.kde.BroadcastNotifications.Notify "{'appIcon': <'network-disconnect'>, 'body': <'Ошибка обновления ОС - обратитесь к администратору!'>, 'summary': <'Обновление ОС.'>, 'timeout': <'60000'>"}
   exit 1
   fi
